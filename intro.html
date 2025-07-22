@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CannaChain - Welcome to Decentralized Medicinal Cannabis</title>
+  <link rel="stylesheet" href="src/index.css" /> <!-- Link to your provided CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;900&family=Merriweather:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* Additional styles for 3D canvas and intro-specific elements */
+    #three-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.2;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+    .cta-button {
+      margin-top: 1.5rem;
+      display: inline-block;
+    }
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+      }
+      .hero p {
+        font-size: 0.85rem;
+      }
+      .cta-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- No JavaScript Fallback -->
+  <div class="no-js">
+    JavaScript is disabled. Please enable it to experience the full functionality of CannaChain.
+  </div>
+
+  <!-- Header -->
+  <header class="visible">
+    <div class="container header-content">
+      <div class="logo-text">WeedLend</div>
+      <nav>
+        <button class="menu-toggle" aria-label="Toggle navigation">
+          <span>☰</span>
+        </button>
+        <div class="nav-container">
+          <ul class="nav-menu">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#marketplace">Marketplace</a></li>
+            <li><a href="#showcase">Virtual Land</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="wallet-container">
+        <wui-connect-button></wui-connect-button>
+        <div class="network-status">
+          <span class="status-icon"></span>
+          <span>Ethereum Mainnet</span>
+        </div>
+        <div class="balance">0.00 ETH</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with 3D Canvas -->
+  <section class="hero" id="main-content">
+    <canvas id="three-canvas"></canvas>
+    <div class="container hero-content">
+      <h1>Welcome to <span class="highlight">WeedLend</span></h1>
+      <p>
+        Empowering medicinal cannabis access through blockchain. Securely trade, stake, and explore a decentralized ecosystem built for patients, providers, and growers.
+      </p>
+      <button class="cta-button">Connect Wallet</button>
+    </div>
+  </section>
+
+  <!-- JavaScript for 3D Elements and Interactivity -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script>
+    // Ensure no-js message is hidden when JavaScript is enabled
+    document.querySelector('.no-js').style.display = 'none';
+
+    // Three.js Setup for 3D Cannabis Leaf (Simplified Geometry)
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Create a simple leaf-like geometry (replace with a proper 3D model for production)
+    const geometry = new THREE.SphereGeometry(2, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x2a7f62, wireframe: true });
+    const leaf = new THREE.Mesh(geometry, material);
+    scene.add(leaf);
+
+    camera.position.z = 5;
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      leaf.rotation.x += 0.01;
+      leaf.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Menu Toggle for Mobile
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navContainer = document.querySelector('.nav-container');
+    menuToggle.addEventListener('click', () => {
+      navContainer.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', navContainer.classList.contains('open'));
+    });
+
+    // Header Scroll Effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      const header = document.querySelector('header');
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        header.classList.remove('visible');
+        header.classList.add('hidden');
+      } else {
+        header.classList.add('visible');
+        header.classList.remove('hidden');
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
+</body>
+</html>
